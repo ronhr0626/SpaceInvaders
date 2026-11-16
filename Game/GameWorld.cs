@@ -9,7 +9,7 @@ public class GameWorld
 {
     private const double PlayerShotSpeed = -320;
     private const double AlienShotSpeed = 120;
-    private const double RespawnTime = 1.5;
+    private const double RespawnTime = 0.5;
     private const double GameOverDelay = 1.5;
     private const double BannerTime = 2.0;
 

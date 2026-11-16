@@ -17,7 +17,7 @@ public record HighScoreRow(string Place, string Name, string Score);
 public static class HighScoreStore
 {
     public const int MaxEntries = 10;
-    public const int MaxNameLength = 12;
+    public const int MaxNameLength = 15;
 
     private static string FilePath
     {

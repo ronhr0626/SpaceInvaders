@@ -95,10 +95,10 @@
                             <ItemsControl x:Name="StartHighScoreList">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate x:DataType="game:HighScoreRow">
-                                        <Grid ColumnDefinitions="26,120,60">
-                                            <TextBlock Grid.Column="0" Text="{Binding Place}" HorizontalAlignment="Right" Margin="0,0,6,0"/>
+                                                                                <Grid ColumnDefinitions="20,94,Auto">
+                                            <TextBlock Grid.Column="0" Text="{Binding Place}" HorizontalAlignment="Right" Margin="0,0,4,0"/>
                                             <TextBlock Grid.Column="1" Text="{Binding Name}"/>
-                                            <TextBlock Grid.Column="2" Text="{Binding Score}" HorizontalAlignment="Right"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding Score}" Margin="1,0,0,0"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -131,8 +131,8 @@
                         <StackPanel Grid.Column="0" Spacing="6">
                             <StackPanel x:Name="NameEntryPanel" Spacing="6">
                                 <TextBlock Text="YOU MADE THE TOP 10!" Classes="heading"/>
-                                <TextBlock Text="Enter your name (max 12):" Classes="dim"/>
-                                <TextBox x:Name="NameBox" MaxLength="12" Width="180" HorizontalAlignment="Left"/>
+                                <TextBlock Text="Enter your name (max 15):" Classes="dim"/>
+                                <TextBox x:Name="NameBox" MaxLength="15" Width="180" HorizontalAlignment="Left"/>
                                 <Button x:Name="SaveButton" Content="SAVE" Width="100" Click="OnSaveClick"/>
                             </StackPanel>
                             <TextBlock x:Name="SavedText" Text="Score saved!" Classes="heading" IsVisible="False"/>
@@ -146,7 +146,7 @@
                             <ItemsControl x:Name="GameOverHighScoreList">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate x:DataType="game:HighScoreRow">
-                                        <Grid ColumnDefinitions="26,120,60">
+                                        <Grid ColumnDefinitions="22,100,46">
                                             <TextBlock Grid.Column="0" Text="{Binding Place}" HorizontalAlignment="Right" Margin="0,0,6,0"/>
                                             <TextBlock Grid.Column="1" Text="{Binding Name}"/>
                                             <TextBlock Grid.Column="2" Text="{Binding Score}" HorizontalAlignment="Right"/>
