@@ -1,0 +1,170 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:SpaceInvaders"
+        xmlns:game="using:SpaceInvaders.Game"
+        x:Class="SpaceInvaders.MainWindow"
+        Title="Space Invaders"
+        Width="1280" Height="720"
+        WindowStartupLocation="CenterScreen"
+        Background="Black">
+
+    <Window.Styles>
+        <!-- Shared look for the menus. Everything is designed for the 640x360 game screen. -->
+        <Style Selector="TextBlock">
+            <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="11"/>
+        </Style>
+        <Style Selector="TextBlock.heading">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#3DFF8B"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+        <Style Selector="TextBlock.dim">
+            <Setter Property="Foreground" Value="#9AA5B1"/>
+            <Setter Property="FontSize" Value="10"/>
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="MinHeight" Value="0"/>
+            <Setter Property="Padding" Value="14,4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="MinHeight" Value="0"/>
+            <Setter Property="Padding" Value="6,3"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid>
+        <!-- Layer 1: the game itself -->
+        <local:GameCanvas x:Name="GameView"/>
+
+        <!-- Layer 2: the menus, scaled the same way as the game -->
+        <Viewbox Stretch="Uniform">
+            <Panel Width="640" Height="360">
+
+                <!-- ============ START SCREEN ============ -->
+                <Grid x:Name="StartScreen" Background="#D8000000" RowDefinitions="Auto,*,Auto">
+
+                    <StackPanel Grid.Row="0" Margin="0,14,0,0" HorizontalAlignment="Center">
+                        <TextBlock Text="SPACE INVADERS" FontSize="34" FontWeight="Bold"
+                                   Foreground="#3DFF8B" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Stop the alien fleet before it lands!" Classes="dim"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Grid Grid.Row="1" ColumnDefinitions="*,*" Margin="40,12,40,0">
+
+                        <!-- Left: how to play and points -->
+                        <StackPanel Grid.Column="0" Spacing="2">
+                            <TextBlock Text="HOW TO PLAY" Classes="heading"/>
+                            <TextBlock Text="← →  /  A D    Move"/>
+                            <TextBlock Text="SPACE / W / ↑  Shoot"/>
+                            <TextBlock Text="P  /  ESC      Pause"/>
+                            <TextBlock Text="Hide behind the bunkers." Classes="dim" Margin="0,4,0,0"/>
+                            <TextBlock Text="Extra life every 1500 points." Classes="dim"/>
+
+                            <TextBlock Text="POINTS" Classes="heading" Margin="0,10,0,4"/>
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <local:SpriteView SpriteName="Ufo" Color="#FF4D4D" Width="24" Height="11"/>
+                                <TextBlock Text="= ? MYSTERY" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <local:SpriteView SpriteName="AlienA" Color="#FF5FD7" Width="24" Height="11"/>
+                                <TextBlock Text="= 30 POINTS" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <local:SpriteView SpriteName="AlienB" Color="#4FD8FF" Width="24" Height="11"/>
+                                <TextBlock Text="= 20 POINTS" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <local:SpriteView SpriteName="AlienC" Color="#7CFF6B" Width="24" Height="11"/>
+                                <TextBlock Text="= 10 POINTS" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Right: top 10 -->
+                        <StackPanel Grid.Column="1" Margin="30,0,0,0">
+                            <TextBlock Text="TOP 10" Classes="heading"/>
+                            <ItemsControl x:Name="StartHighScoreList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="game:HighScoreRow">
+                                        <Grid ColumnDefinitions="26,120,60">
+                                            <TextBlock Grid.Column="0" Text="{Binding Place}" HorizontalAlignment="Right" Margin="0,0,6,0"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Name}"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding Score}" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Grid.Row="2" Margin="0,0,0,14" HorizontalAlignment="Center" Spacing="4">
+                        <Button x:Name="StartButton" Content="START" IsDefault="True" Width="140"
+                                HorizontalAlignment="Center" Click="OnStartClick"/>
+                        <TextBlock Text="Press ENTER to start" Classes="dim" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- ============ GAME OVER SCREEN ============ -->
+                <Grid x:Name="GameOverScreen" IsVisible="False" Background="#D8000000" RowDefinitions="Auto,*,Auto">
+
+                    <StackPanel Grid.Row="0" Margin="0,16,0,0" HorizontalAlignment="Center" Spacing="2">
+                        <TextBlock Text="GAME OVER" FontSize="32" FontWeight="Bold" Foreground="#FF4D4D"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="FinalScoreText" Text="SCORE 000000" FontSize="14"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="NewHighScoreText" Text="NEW HIGH SCORE!" Foreground="#FFE14D"
+                                   FontWeight="Bold" HorizontalAlignment="Center" IsVisible="False"/>
+                    </StackPanel>
+
+                    <Grid Grid.Row="1" ColumnDefinitions="*,*" Margin="40,12,40,0">
+
+                        <!-- Left: enter name (only if the score made the list) -->
+                        <StackPanel Grid.Column="0" Spacing="6">
+                            <StackPanel x:Name="NameEntryPanel" Spacing="6">
+                                <TextBlock Text="YOU MADE THE TOP 10!" Classes="heading"/>
+                                <TextBlock Text="Enter your name (max 12):" Classes="dim"/>
+                                <TextBox x:Name="NameBox" MaxLength="12" Width="180" HorizontalAlignment="Left"/>
+                                <Button x:Name="SaveButton" Content="SAVE" Width="100" Click="OnSaveClick"/>
+                            </StackPanel>
+                            <TextBlock x:Name="SavedText" Text="Score saved!" Classes="heading" IsVisible="False"/>
+                            <TextBlock x:Name="NoEntryText" Text="Not in the TOP 10 this time.&#x0a;Try again!"
+                                       Classes="dim" IsVisible="False"/>
+                        </StackPanel>
+
+                        <!-- Right: top 10 -->
+                        <StackPanel Grid.Column="1" Margin="30,0,0,0">
+                            <TextBlock Text="TOP 10" Classes="heading"/>
+                            <ItemsControl x:Name="GameOverHighScoreList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="game:HighScoreRow">
+                                        <Grid ColumnDefinitions="26,120,60">
+                                            <TextBlock Grid.Column="0" Text="{Binding Place}" HorizontalAlignment="Right" Margin="0,0,6,0"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Name}"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding Score}" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center"
+                                Spacing="12" Margin="0,0,0,16">
+                        <Button x:Name="PlayAgainButton" Content="PLAY AGAIN" Width="120" Click="OnPlayAgainClick"/>
+                        <Button Content="MENU" Width="120" Click="OnMenuClick"/>
+                    </StackPanel>
+                </Grid>
+
+            </Panel>
+        </Viewbox>
+    </Grid>
+</Window>
