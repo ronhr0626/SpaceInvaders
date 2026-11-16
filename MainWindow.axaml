@@ -53,7 +53,7 @@
                 <Grid x:Name="StartScreen" Background="#D8000000" RowDefinitions="Auto,*,Auto">
 
                     <StackPanel Grid.Row="0" Margin="0,14,0,0" HorizontalAlignment="Center">
-                        <TextBlock Text="SPACE INVADERS" FontSize="34" FontWeight="Bold"
+                        <TextBlock Text="Space: The Alien Assault" FontSize="34" FontWeight="Bold"
                                    Foreground="#3DFF8B" HorizontalAlignment="Center"/>
                         <TextBlock Text="Stop the alien fleet before it lands!" Classes="dim"
                                    HorizontalAlignment="Center"/>
